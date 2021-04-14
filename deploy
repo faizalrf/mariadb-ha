@@ -1,3 +1,5 @@
+# BOF
+
 docker-compose down
 docker-compose up --detach --build
 docker container cp ./conf/mariadb1.cnf mariadb1:/etc/mysql/mariadb.conf.d/50-server.cnf
@@ -21,4 +23,6 @@ sleep 5
 docker container exec mariadb1 bash -c "mariadb < /tmp/init/01.sql"
 docker container exec mariadb2 bash -c "mariadb < /tmp/init/02.sql"
 docker container exec mariadb3 bash -c "mariadb < /tmp/init/02.sql"
+
+# EOF
 
