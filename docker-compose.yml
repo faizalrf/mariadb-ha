@@ -46,8 +46,10 @@ services:
         image: mariadb/maxscale
         ports:
             - 4401:4406
-            - 6601:3306
-            - 8901:8989
+            #- 6601:3306
+            #- 8901:8989
+        volumes:
+            - ./conf/max.cnf:/etc/maxscale.cnf
         networks:
             - mariadb_nw
         depends_on:
@@ -60,8 +62,10 @@ services:
         image: mariadb/maxscale
         ports:
             - 4402:4406
-            - 6602:3306
-            - 8902:8989
+            #- 6602:3306
+            #- 8902:8989
+        volumes:
+            - ./conf/max.cnf:/etc/maxscale.cnf
         networks:
             - mariadb_nw
         depends_on:

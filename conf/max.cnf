@@ -1,5 +1,5 @@
 [maxscale]
-threads=auto
+threads=1
 log_warning=true
 
 [server1]
@@ -26,16 +26,16 @@ module=mariadbmon
 servers=server1,server2,server3
 user=maxuser
 password=password
-#replication_user=repl_user
-#replication_password=password
-#auto_failover=true
-#auto_rejoin=true
-#monitor_interval=100
-#failcount=2
-#switchover_timeout=20
-#failover_timeout=20
+replication_user=repl_user
+replication_password=password
+auto_failover=true
+auto_rejoin=true
+monitor_interval=1000
+failcount=2
+switchover_timeout=20
+failover_timeout=20
 
-#cooperative_monitoring_locks=majority_of_running
+cooperative_monitoring_locks=majority_of_running
 #cooperative_monitoring_locks=majority_of_all
 
 [Read-Write-Service]

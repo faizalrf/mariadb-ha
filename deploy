@@ -11,12 +11,6 @@ docker container exec mariadb2 bash -c "chmod 644 /etc/mysql/mariadb.conf.d/50-s
 docker container cp ./conf/mariadb3.cnf mariadb3:/etc/mysql/mariadb.conf.d/50-server.cnf
 docker container exec mariadb3 bash -c "chmod 644 /etc/mysql/mariadb.conf.d/50-server.cnf"
 
-docker container cp ./conf/max.cnf max1:/etc/maxscale.cnf
-docker container exec max1 bash -c "chmod 644 /etc/maxscale.cnf && chown root:root /etc/maxscale.cnf"
-
-docker container cp ./conf/max.cnf max2:/etc/maxscale.cnf
-docker container exec max2 bash -c "chmod 644 /etc/maxscale.cnf && chown root:root /etc/maxscale.cnf"
-
 docker container restart mariadb1 mariadb2 mariadb3 max1 max2
 
 sleep 5
