@@ -93,7 +93,7 @@ rules=/var/lib/maxscale/filter.json
 [Result-Limit]
 type=filter
 module=maxrows
-debug=2
+debug=0
 max_resultset_return=error
 max_resultset_rows=1000
 max_resultset_size=65536
