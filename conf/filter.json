@@ -1,0 +1,33 @@
+{
+    "rules": [
+        {
+            "replace": {
+                "column": "nric",
+                "match": "^.{0,6}"
+            },
+            "with": {
+                "fill": "*"
+            },
+                "exempted": [ "maxuser" ]
+        },
+        {
+                "replace": {
+                        "column": "name"
+                },
+                "obfuscate": {
+                        "column": "name"
+                },
+                "exempted": [ "maxuser" ]
+        },
+        {
+            "replace": {
+                "column": "phone",
+                "match": ".{0,4}$"
+            },
+            "with": {
+                "fill": "*"
+            },
+            "exempted": [ "maxuser" ]
+        }
+    ]
+}

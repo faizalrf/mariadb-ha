@@ -1,22 +1,23 @@
 [maxscale]
-threads=1
-log_warning=true
+threads=auto
+admin_host=0.0.0.0
+admin_secure_gui=false
 
 [server1]
 type=server
-address=mariadb1
+address=172.31.29.121
 port=3306
 protocol=MariaDBBackend
 
 [server2]
 type=server
-address=mariadb2
+address=172.31.29.194
 port=3306
 protocol=MariaDBBackend
 
 [server3]
 type=server
-address=mariadb3
+address=172.31.26.162
 port=3306
 protocol=MariaDBBackend
 
@@ -25,9 +26,9 @@ type=monitor
 module=mariadbmon
 servers=server1,server2,server3
 user=maxuser
-password=password
+password=A79A8E992B80B08A0AF1068800C6D77A757D12576FEF83B8FD08EA9F21E3458D
 replication_user=repl_user
-replication_password=password
+replication_password=11B07BA1F77D96180BE330FA9DA933D083ED698501FF29927664E20232DD5063
 auto_failover=true
 auto_rejoin=true
 monitor_interval=1000
@@ -35,24 +36,70 @@ failcount=2
 switchover_timeout=20
 failover_timeout=20
 
-cooperative_monitoring_locks=majority_of_running
-#cooperative_monitoring_locks=majority_of_all
+cooperative_monitoring_locks=majority_of_all
+#cooperative_monitoring_locks=majority_of_running
 
 [Read-Write-Service]
 type=service
 router=readwritesplit
 servers=server1,server2,server3
 user=maxuser
-password=password
-#master_reconnection=1
-#delayed_retry=1
+password=A79A8E992B80B08A0AF1068800C6D77A757D12576FEF83B8FD08EA9F21E3458D
+master_reconnection=1
+master_accept_reads=1
 
 # causal_reads can be one of (none, local, global, fast)
-#causal_reads=local
-#transaction_replay=true
+causal_reads=local
+transaction_replay=true
+
+filters=Result-Limit|Firewall-Blacklist
 
 [Read-Write-Listener]
 type=listener
 service=Read-Write-Service
 protocol=MariaDBClient
 port=4006
+address=0.0.0.0
+
+[Masked-Read-Write-Service]
+type=service
+router=readwritesplit
+servers=server1,server2,server3
+user=maxuser
+password=A79A8E992B80B08A0AF1068800C6D77A757D12576FEF83B8FD08EA9F21E3458D
+master_reconnection=1
+master_accept_reads=1
+
+# causal_reads can be one of (none, local, global, fast)
+causal_reads=local
+transaction_replay=true
+
+filters=Result-Limit|Firewall-Blacklist|Data-Masking
+
+[Masked-Read-Write-Listener]
+type=listener
+service=Masked-Read-Write-Service
+protocol=MariaDBClient
+port=4007
+address=0.0.0.0
+
+[Data-Masking]
+type=filter
+module=masking
+warn_type_mismatch=never
+large_payload=abort
+rules=/var/lib/maxscale/filter.json
+
+[Result-Limit]
+type=filter
+module=maxrows
+debug=2
+max_resultset_return=error
+max_resultset_rows=1000
+max_resultset_size=65536
+
+[Firewall-Blacklist]
+type=filter
+module=dbfwfilter
+action=block
+rules=/var/lib/maxscale/firewall.rule

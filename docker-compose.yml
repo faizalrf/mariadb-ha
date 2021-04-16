@@ -1,78 +1,105 @@
-version: '3.8'
+version: '3'
 
 services:
-    server1:
-        image: mariadb/server
-        container_name: mariadb1
-        environment:
-            - MARIADB_ROOT_PASSWORD=password
-        ports:
-            - 3301:3306
-        networks:
-            - mariadb_nw
-        volumes:
-            - ./init/server1:/tmp/init
 
-    server2:
-        image: mariadb/server
-        container_name: mariadb2
-        environment:
-            - MARIADB_ROOT_PASSWORD=password
-        ports:
-            - 3302:3306
-        networks:
-            - mariadb_nw
-        volumes:
-            - ./init/others:/tmp/init
-        depends_on:
-            - server1
-        
-    server3:
-        image: mariadb/server
-        container_name: mariadb3
-        environment:
-            - MARIADB_ROOT_PASSWORD=password
-        ports:
-            - 3303:3306
-        networks:
-            - mariadb_nw
-        volumes:
-            - ./init/others:/tmp/init
-        depends_on:
-            - server2
-                        
-    maxs1:
-        container_name: max1
-        image: mariadb/maxscale
-        ports:
-            - 4401:4406
-            #- 6601:3306
-            #- 8901:8989
-        volumes:
-            - ./conf/max.cnf:/etc/maxscale.cnf
-        networks:
-            - mariadb_nw
-        depends_on:
-            - server1
-            - server2
-            - server3
-            
-    maxs2:
-        container_name: max2
-        image: mariadb/maxscale
-        ports:
-            - 4402:4406
-            #- 6602:3306
-            #- 8902:8989
-        volumes:
-            - ./conf/max.cnf:/etc/maxscale.cnf
-        networks:
-            - mariadb_nw
-        depends_on:
-            - server1
-            - server2
-            - server3
+  db1:
+    build:
+      context: .
+      args:
+        TOKEN: ${MARIADB_ENTERPRISE_TOKEN}
+    image: ${IMAGE_NAME}
+    hostname: ${DB1}
+    container_name: ${DB1}
+    env_file:
+      - .env
+    depends_on:
+      - "db3"
+    links:
+      - "db2"
+      - "db3"
+    ports:
+      - 3307:3306
+    volumes:
+      - ./conf:/etc/my.cnf.d
+    mem_limit: ${SERVER_RAM}
 
-networks:
-    mariadb_nw:
-        driver: bridge
+  db2:
+    build:
+      context: .
+      args:
+        TOKEN: ${MARIADB_ENTERPRISE_TOKEN}
+    image: ${IMAGE_NAME}
+    hostname: ${DB2}
+    container_name: ${DB2}
+    env_file:
+      - .env
+    depends_on:
+      - "db3"
+    links:
+      - "db3"
+    ports:
+      - 3308:3306
+    volumes:
+      - ./conf:/etc/my.cnf.d
+    mem_limit: ${SERVER_RAM}
+
+  db3:
+    build:
+      context: .
+      args:
+        TOKEN: ${MARIADB_ENTERPRISE_TOKEN}
+    image: ${IMAGE_NAME}
+    hostname: ${DB3}
+    container_name: ${DB3}
+    env_file:
+      - .env
+    ports:
+      - 3309:3306
+    volumes:
+      - ./conf:/etc/my.cnf.d
+    mem_limit: ${SERVER_RAM}
+
+  mx1:
+    image: mariadb/maxscale
+    hostname: ${MX1}
+    container_name: ${MX1}
+    volumes:
+      - maxscale:/var/lib/maxscale
+    depends_on:
+      - "db1"
+      - "db2"
+      - "db3"
+    env_file:
+      - .env
+    links:
+      - "db1"
+      - "db2"
+      - "db3"
+    ports:
+      - 3310:3306
+      - 8988:8989
+    mem_limit: ${MAXSCALE_RAM}
+
+  mx2:
+    image: mariadb/maxscale
+    hostname: ${MX2}
+    container_name: ${MX2}
+    volumes:
+      - maxscale:/var/lib/maxscale
+    depends_on:
+      - "db1"
+      - "db2"
+      - "db3"
+    env_file:
+      - .env
+    links:
+      - "db1"
+      - "db2"
+      - "db3"
+    ports:
+      - 3311:3306
+      - 8989:8989
+    mem_limit: ${MAXSCALE_RAM}
+
+volumes:
+  maxscale:

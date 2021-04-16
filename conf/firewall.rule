@@ -1,0 +1,4 @@
+rule safe_delete match no_where_clause on_queries delete
+rule all_tables match regex '.*from.*'
+
+users %@% match all rules safe_delete all_tables

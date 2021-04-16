@@ -41,19 +41,16 @@
 log_bin
 binlog_format=row
 binlog_row_image=full
+gtid_domain_id=1
 server_id=1000
-log_basename=master1
 log_slave_updates=1
 gtid_strict_mode=1
 max_statement_time=300
 session_track_system_variables=last_gtid
-#shutdown_wait_for_slaves=ON
-#log-error=/var/log/mysqld.log
-#user=root
-
-# Disabling symbolic-links is recommended to prevent assorted security
-# risks
-symbolic-links=0
+shutdown_wait_for_slaves=ON
+log_error=server.log
+innodb_flush_log_at_trx_commit=1
+sync_binlog=1
 
 # This group is only read by MariaDB-10.3 servers.
 # If you use the same .cnf file for MariaDB of different versions,

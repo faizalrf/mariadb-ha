@@ -1,0 +1,109 @@
+version: '2'
+
+services:
+    server1:
+        image: mariadb/server
+        hostname: mariadb1
+        container_name: mariadb1
+        privileged: true
+        environment:
+            - MARIADB_ROOT_PASSWORD=password
+        ports:
+            - 3301:3306
+        networks:
+            static-network:
+                ipv4_address: 172.20.0.2
+        volumes:
+            - ./init/server1:/tmp/init
+        mem_limit: 2G
+
+    server2:
+        image: mariadb/server
+        hostname: mariadb2
+        container_name: mariadb2
+        privileged: true
+        environment:
+            - MARIADB_ROOT_PASSWORD=password
+        ports:
+            - 3302:3306
+        networks:
+            static-network:
+                ipv4_address: 172.20.0.3
+        volumes:
+            - ./init/others:/tmp/init
+        depends_on:
+            - "server1"
+        mem_limit: 2G
+        
+    server3:
+        image: mariadb/server
+        hostname: mariadb3
+        container_name: mariadb3
+        privileged: true
+        environment:
+            - MARIADB_ROOT_PASSWORD=password
+        ports:
+            - 3303:3306
+        networks:
+            static-network:
+                ipv4_address: 172.20.0.4
+        volumes:
+            - ./init/others:/tmp/init
+        depends_on:
+            - "server2"
+        mem_limit: 2G
+                        
+    maxs1:
+        hostname: max1
+        container_name: max1
+        image: mariadb/maxscale
+        privileged: true
+        ports:
+            - 4401:4006
+            - 8901:8989
+        volumes:
+            - maxscale:/var/lib/maxscale
+            - ./conf/max.cnf:/etc/maxscale.cnf
+        links:
+            - "server1"
+            - "server2"
+            - "server3"
+        mem_limit: 256M
+        networks:
+            static-network:
+                ipv4_address: 172.20.0.5
+            
+    #maxs2:
+    #    hostname: max2
+    #    container_name: max2
+    #    image: mariadb/maxscale
+    #    privileged: true
+    #    ports:
+    #        - 4402:4006
+    #        - 8902:8989
+    #    cap_add:
+    #        - SYS_ADMIN
+    #    security_opt:
+    #        - seccomp:unconfined
+    #    tmpfs:
+    #        - /tmp
+    #    volumes:
+    #        - maxscale:/var/lib/maxscale
+    #    networks:
+    #        static-network:
+    #            ipv4_address: 172.20.0.6
+    #    depends_on:
+    #        - server1
+    #        - server2
+    #        - server3
+
+networks:
+    static-network:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+                  ip_range: 172.20.5.0/24
+                  gateway: 172.20.5.254
+
+volumes:
+    maxscale:
