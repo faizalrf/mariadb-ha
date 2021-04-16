@@ -22,7 +22,7 @@
         {
             "replace": {
                 "column": "phone",
-                "match": ".{0,4}$"
+                "match": ".{0,3}$"
             },
             "with": {
                 "fill": "*"
