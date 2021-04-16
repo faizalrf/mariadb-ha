@@ -103,3 +103,5 @@ type=filter
 module=dbfwfilter
 action=block
 rules=/var/lib/maxscale/firewall.rule
+
+# EOF
