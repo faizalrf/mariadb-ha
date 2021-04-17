@@ -1,13 +1,20 @@
 version: '3.8'
 
 services:
+
     server1:
-        image: mariadb/server
+        build:
+            context: .
+            args:
+                SERVER_VERSION: ${MARIADB_VERSION}
+                ES_TOKEN: ${DOWNLOAD_TOKEN}
+                PORT: ${DEFAULT_PORT}
+        image: mariadb-es
         hostname: mariadb1
         container_name: mariadb1
         privileged: true
-        environment:
-            - MARIADB_ROOT_PASSWORD=password
+        env_file:
+            - .env        
         ports:
             - 3301:3306
         networks:
@@ -18,12 +25,18 @@ services:
         mem_limit: 2G
 
     server2:
-        image: mariadb/server
+        build:
+            context: .
+            args:
+                SERVER_VERSION: ${MARIADB_VERSION}
+                ES_TOKEN: ${DOWNLOAD_TOKEN}
+                PORT: ${DEFAULT_PORT}
+        image: mariadb-es
         hostname: mariadb2
         container_name: mariadb2
         privileged: true
-        environment:
-            - MARIADB_ROOT_PASSWORD=password
+        env_file:
+            - .env        
         ports:
             - 3302:3306
         networks:
@@ -36,12 +49,18 @@ services:
         mem_limit: 2G
         
     server3:
-        image: mariadb/server
+        build:
+            context: .
+            args:
+                SERVER_VERSION: ${MARIADB_VERSION}
+                ES_TOKEN: ${DOWNLOAD_TOKEN}
+                PORT: ${DEFAULT_PORT}
+        image: mariadb-es
         hostname: mariadb3
         container_name: mariadb3
         privileged: true
-        environment:
-            - MARIADB_ROOT_PASSWORD=password
+        env_file:
+            - .env        
         ports:
             - 3303:3306
         networks:
@@ -63,7 +82,7 @@ services:
             - 8901:8989
         volumes:
             - maxscale:/var/lib/maxscale
-            - ./conf/max.cnf:/etc/maxscale.cnf
+            #- ./conf/max.cnf:/etc/maxscale.cnf
         links:
             - "server1"
             - "server2"
@@ -89,7 +108,7 @@ services:
             - /tmp
         volumes:
             - maxscale:/var/lib/maxscale
-            - ./conf/max.cnf:/etc/maxscale.cnf
+            #- ./conf/max.cnf:/etc/maxscale.cnf
         networks:
             static-network:
                 ipv4_address: 172.20.0.6

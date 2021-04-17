@@ -1,79 +1,38 @@
 # vim:set ft=dockerfile:
 
-# Setup A Template Image
-FROM centos:8
+# Pull the CentOS7 image
+FROM centos:latest
+USER root
 
-# Define ENV Variables
-ARG TOKEN=${TOKEN}
-ENV TINI_VERSION=v0.18.0
-ENV MARIADB_VERSION=10.5
+# Update System
+# RUN yum -y -q install epel-release && yum -y -q upgrade
 
-# Add MariaDB Enterprise Repo
-ADD https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup /tmp
-
-RUN chmod +x /tmp/mariadb_es_repo_setup && \
-    /tmp/mariadb_es_repo_setup --mariadb-server-version=${MARIADB_VERSION} --token=${TOKEN} --apply
+ARG SERVER_VERSION
+ARG ES_TOKEN
+ARG PORT
 
 # Update System
 RUN dnf -y install epel-release && \
     dnf -y upgrade
 
-# Install Various Packages/Tools
-RUN dnf -y install bind-utils \
-    bc \
-    boost \
-    expect \
-    git \
-    glibc-langpack-en \
-    jemalloc \
-    jq \
-    less \
-    libaio \
-    monit \
-    nano \
-    net-tools \
-    openssl \
-    rsyslog \
-    snappy \
-    sudo \
-    tcl \
-    vim \
-    wget
+# Setup MariaDB repositories
+RUN yum -y -q install wget && \
+    wget https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup && \
+    chmod +x mariadb_es_repo_setup && \
+    ./mariadb_es_repo_setup --token="${ES_TOKEN}" --apply --mariadb-server-version="${SERVER_VERSION}"
 
-# Default Locale Variables
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US.UTF-8
-
-# Install MariaDB Packages
-RUN dnf -y install \
-     MariaDB-shared \
-     MariaDB-client \
-     MariaDB-server
-
-# Add Tini Init Process
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
+RUN echo "Token: ${ES_TOKEN}" && echo "Server Version: ${SERVER_VERSION}" && echo "Port: ${PORT}"
 
 # Create Persistent Volumes
-VOLUME ["/etc/my.cnf.d","/var/lib/mysql"]
+# VOLUME ["/etc/my.cnf.d","/var/lib/mysql"]
 
-RUN mkdir -p /etc/my.cnf.d
+RUN yum -y -q install MariaDB-server MariaDB-backup
 
-# Copy Entrypoint To Image
-COPY ./init/docker-entrypoint.sh /usr/bin/
+# Expose Mysql port 3306
+EXPOSE ${PORT}
 
-# Do Some Housekeeping
-RUN chmod +x /usr/bin/docker-entrypoint.sh && \
-    ln -s /usr/bin/docker-entrypoint.sh /docker-entrypoint.sh && \
-    sed -i 's|SysSock.Use="off"|SysSock.Use="on"|' /etc/rsyslog.conf && \
-    sed -i 's|^.*module(load="imjournal"|#module(load="imjournal"|g' /etc/rsyslog.conf && \
-    sed -i 's|^.*StateFile="imjournal.state")|#  StateFile="imjournal.state")|g' /etc/rsyslog.conf && \
-    dnf clean all && \
-    rm -rf /var/cache/dnf && \
-    find /var/log -type f -exec cp /dev/null {} \; && \
-    cat /dev/null > ~/.bash_history && \
-    history -c
+LABEL version="10.5"
+LABEL description="MariaDB ES Server"
 
-# Bootstrap
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["mariadbd --user=mysql"]
+# Start the service
+CMD test -d /var/run/mariadb || mkdir -p /var/run/mariadb; chmod 0777 /var/lib/mysql; chmod 0777 /var/run/mariadb; /usr/sbin/mariadbd --basedir=/usr --datadir=/var/lib/mysql --user=mysql
