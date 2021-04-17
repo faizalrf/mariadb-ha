@@ -28,9 +28,20 @@ docker container exec mariadb2 bash -c "mariadb < /tmp/init/02.sql"
 docker container exec mariadb3 bash -c "mariadb < /tmp/init/02.sql"
 ```
 
-The above will install 2 MaxScale 2.5 and 3 MariaDB 10.5 enterprise servers, set up replication between the nodes and set up MaxScale with some generic filters and firewall rules as examples.
+## The Setup
+
+This will be using CentOS 8 containers and will:
+
+- Install 2 MaxScale 2.5 nodes with static IP
+- Install 3 MariaDB 10.5 enterprise servers nodes with static IP
+- Set up semi-synchronous replication between the MariaDB nodes
+- Set up MaxScale with some generic filters and firewall rules as examples
+- Enable Transaction replay and Causal Reads for MaxScale
+
+There is a couple of scripts which will push some transactions to the MariaDB through the two MaxScale nodes for testing failover, transactionm replay and causal reads while under load.
 
 Refer to the `./conf/max.cnf` for details on what is configured for MaxScale nodes. 
 
 Destroy the environment by `docker-compose down`
 
+## Thank you!
