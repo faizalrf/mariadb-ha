@@ -5,19 +5,19 @@ admin_secure_gui=false
 
 [server1]
 type=server
-address=mariadb1
+address=172.20.0.2
 port=3306
 protocol=MariaDBBackend
 
 [server2]
 type=server
-address=mariadb2
+address=172.20.0.3
 port=3306
 protocol=MariaDBBackend
 
 [server3]
 type=server
-address=mariadb3
+address=172.20.0.4
 port=3306
 protocol=MariaDBBackend
 
@@ -50,7 +50,10 @@ master_accept_reads=1
 
 # causal_reads can be one of (none, local, global, fast)
 causal_reads=local
+causal_reads_timeout=1s
 transaction_replay=true
+delayed_retry=1
+delayed_retry_timeout=120s
 
 filters=Result-Limit|Firewall-Blacklist
 

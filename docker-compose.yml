@@ -81,8 +81,9 @@ services:
         image: mariadb/maxscale
         privileged: true
         ports:
-            - 4401:4006
-            - 8901:8989
+            - 4601:4006
+            - 4701:4007
+            - 8981:8989
         volumes:
             - maxscale:/var/lib/maxscale
             - ./conf/max.cnf:/etc/maxscale.cnf
@@ -103,8 +104,9 @@ services:
         image: mariadb/maxscale
         privileged: true
         ports:
-            - 4402:4006
-            - 8902:8989
+            - 4602:4006
+            - 4702:4007
+            - 8982:8989
         cap_add:
             - SYS_ADMIN
         security_opt:
