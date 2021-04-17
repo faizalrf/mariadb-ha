@@ -80,6 +80,8 @@ services:
         container_name: max1
         image: mariadb/maxscale
         privileged: true
+        env_file:
+            - .env        
         ports:
             - 4601:4006
             - 4701:4007
@@ -103,6 +105,8 @@ services:
         container_name: max2
         image: mariadb/maxscale
         privileged: true
+        env_file:
+            - .env        
         ports:
             - 4602:4006
             - 4702:4007
