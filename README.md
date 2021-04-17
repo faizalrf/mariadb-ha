@@ -38,6 +38,9 @@ This will be using CentOS 8 containers and will:
 - Set up MaxScale with some generic filters and firewall rules as examples
 - Enable Transaction replay and Causal Reads for MaxScale
 - Enable MaxScale GUI
+  - To Access GUI, on the browser, go to the following URLs, the user/password are `admin`/`mariadb`
+    -  <http://172.20.0.5:8989> for MaxScale #1 GUI
+    -  <http://172.20.0.6:8989> for MaxScale #2 GUI
 
 There is a couple of scripts which will push some transactions to the MariaDB through the two MaxScale nodes for testing failover, transactionm replay and causal reads while under load.
 
