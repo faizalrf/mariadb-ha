@@ -37,7 +37,8 @@
 # This group is only read by MariaDB servers, not by MySQL.
 # If you use the same .cnf file for MySQL and MariaDB,
 # you can put MariaDB-only options here
-[[mariadb]
+[mariadb]
+log_error=server.log
 log_bin
 binlog_format=row
 binlog_row_image=full
@@ -48,9 +49,11 @@ gtid_strict_mode=1
 max_statement_time=300
 session_track_system_variables=last_gtid
 shutdown_wait_for_slaves=ON
-log_error=server.log
 innodb_flush_log_at_trx_commit=1
 sync_binlog=1
+sync_relay_log=1
+sync_master_info=1
+sync_relay_log_info=1
 
 # This group is only read by MariaDB-10.3 servers.
 # If you use the same .cnf file for MariaDB of different versions,

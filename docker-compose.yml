@@ -22,6 +22,7 @@ services:
                 ipv4_address: 172.20.0.2
         volumes:
             - ./init/server1:/tmp/init
+            - ./conf/mariadb1.cnf:/etc/my.cnf.d/server.cnf
         mem_limit: 2G
 
     server2:
@@ -44,6 +45,7 @@ services:
                 ipv4_address: 172.20.0.3
         volumes:
             - ./init/others:/tmp/init
+            - ./conf/mariadb2.cnf:/etc/my.cnf.d/server.cnf
         depends_on:
             - "server1"
         mem_limit: 2G
@@ -68,6 +70,7 @@ services:
                 ipv4_address: 172.20.0.4
         volumes:
             - ./init/others:/tmp/init
+            - ./conf/mariadb3.cnf:/etc/my.cnf.d/server.cnf
         depends_on:
             - "server2"
         mem_limit: 2G
@@ -82,7 +85,9 @@ services:
             - 8901:8989
         volumes:
             - maxscale:/var/lib/maxscale
-            #- ./conf/max.cnf:/etc/maxscale.cnf
+            - ./conf/max.cnf:/etc/maxscale.cnf
+            - ./conf/filter.json:/var/lib/maxscale/filter.json
+            - ./conf/firewall.rule:/var/lib/maxscale/firewall.rule
         links:
             - "server1"
             - "server2"
@@ -108,7 +113,9 @@ services:
             - /tmp
         volumes:
             - maxscale:/var/lib/maxscale
-            #- ./conf/max.cnf:/etc/maxscale.cnf
+            - ./conf/max.cnf:/etc/maxscale.cnf
+            - ./conf/filter.json:/var/lib/maxscale/filter.json
+            - ./conf/firewall.rule:/var/lib/maxscale/firewall.rule
         networks:
             static-network:
                 ipv4_address: 172.20.0.6

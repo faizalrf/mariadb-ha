@@ -1,21 +1,10 @@
 docker-compose down
+
+echo "y" | docker volume prune
+
 docker-compose up --detach --build
-docker container cp ./conf/mariadb1.cnf mdb1:/etc/my.cnf.d/server.cnf
-docker container exec mdb1 bash -c "chmod 644 /etc/my.cnf.d/server.cnf"
-
-docker container cp ./conf/mariadb2.cnf mdb2:/etc/my.cnf.d/server.cnf
-docker container exec mdb2 bash -c "chmod 644 /etc/my.cnf.d/server.cnf"
-
-docker container cp ./conf/mariadb3.cnf mdb3:/etc/my.cnf.d/server.cnf
-docker container exec mdb3 bash -c "chmod 644 /etc/my.cnf.d/server.cnf"
-
-docker container cp ./conf/mariadb4.cnf mdb4:/etc/my.cnf.d/server.cnf
-docker container exec mdb4 bash -c "chmod 644 /etc/my.cnf.d/server.cnf"
-
-docker container restart mdb1 mdb2 mdb3, mdb4 max1, max2
 
 sleep 5
-docker container exec mdb1 bash -c "mariadb < /tmp/init/01.sql"
-docker container exec mdb2 bash -c "mariadb < /tmp/init/02.sql"
-docker container exec mdb3 bash -c "mariadb < /tmp/init/02.sql"
-docker container exec mdb4 bash -c "mariadb < /tmp/init/02.sql"
+docker container exec mariadb1 bash -c "mariadb < /tmp/init/01.sql"
+docker container exec mariadb2 bash -c "mariadb < /tmp/init/02.sql"
+docker container exec mariadb3 bash -c "mariadb < /tmp/init/02.sql"

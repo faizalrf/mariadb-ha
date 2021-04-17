@@ -5,19 +5,19 @@ admin_secure_gui=false
 
 [server1]
 type=server
-address=172.31.29.121
+address=mariadb1
 port=3306
 protocol=MariaDBBackend
 
 [server2]
 type=server
-address=172.31.29.194
+address=mariadb2
 port=3306
 protocol=MariaDBBackend
 
 [server3]
 type=server
-address=172.31.26.162
+address=mariadb3
 port=3306
 protocol=MariaDBBackend
 
@@ -26,9 +26,9 @@ type=monitor
 module=mariadbmon
 servers=server1,server2,server3
 user=maxuser
-password=A79A8E992B80B08A0AF1068800C6D77A757D12576FEF83B8FD08EA9F21E3458D
+password=P@ssw0rd
 replication_user=repl_user
-replication_password=11B07BA1F77D96180BE330FA9DA933D083ED698501FF29927664E20232DD5063
+replication_password=P@ssw0rd
 auto_failover=true
 auto_rejoin=true
 monitor_interval=1000
@@ -44,7 +44,7 @@ type=service
 router=readwritesplit
 servers=server1,server2,server3
 user=maxuser
-password=A79A8E992B80B08A0AF1068800C6D77A757D12576FEF83B8FD08EA9F21E3458D
+password=P@ssw0rd
 master_reconnection=1
 master_accept_reads=1
 
@@ -66,7 +66,7 @@ type=service
 router=readwritesplit
 servers=server1,server2,server3
 user=maxuser
-password=A79A8E992B80B08A0AF1068800C6D77A757D12576FEF83B8FD08EA9F21E3458D
+password=P@ssw0rd
 master_reconnection=1
 master_accept_reads=1
 
