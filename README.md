@@ -99,6 +99,35 @@ If we want to connect to the MariaDB services through an external MariaDB client
 ***Note:** The IP addresses can be retrieved from the `docker-compose.yml` file.*
  
 There is a couple of scripts under `./scripts/loop_mx1.sh` & `./scripts/loop_mx2.sh` which can be used to push some transactions to the MariaDB through the MaxScale1 and MaxScale 2 respectively. These are super useful for testing the behavior of Read/Write splitting service and how Causal reads can provide a consistent reading behavior and how Transaction Replay improves high availability when MariaDB nodes go down. Furthermore, the cooperative monitoring parameters can help simplify running Two MaxScale without worrying about which of these MaxScale nodes will take care of MariaDB automatic failover/rejoin.
+
+One great feature of MaxScale is, while it can do this automatically, but there might be a need to manually do a switchover. To switchover Primary node from `MariaDB-2` to `MariaDB-1` node, we can execute the `maxctrl` `switchover` command as follows from within the MaxScale node.
+
+```
+[root@max1 /]# maxctrl list servers
+┌───────────┬────────────┬──────┬─────────────┬─────────────────┬──────────────┐
+│ Server    │ Address    │ Port │ Connections │ State           │ GTID         │
+├───────────┼────────────┼──────┼─────────────┼─────────────────┼──────────────┤
+│ MariaDB-1 │ 172.20.0.2 │ 3306 │ 0           │ Slave, Running  │ 1-3000-23912 │
+├───────────┼────────────┼──────┼─────────────┼─────────────────┼──────────────┤
+│ MariaDB-2 │ 172.20.0.3 │ 3306 │ 1           │ Master, Running │ 1-2000-43006 │
+├───────────┼────────────┼──────┼─────────────┼─────────────────┼──────────────┤
+│ MariaDB-3 │ 172.20.0.4 │ 3306 │ 0           │ Slave, Running  │ 1-1000-42507 │
+└───────────┴────────────┴──────┴─────────────┴─────────────────┴──────────────┘
+
+[root@max1 /]# maxctrl call command mariadbmon switchover -t9999 MariaDB-Monitor MariaDB-1 MariaDB-2
+OK
+
+[root@max1 /]# maxctrl list servers
+┌───────────┬────────────┬──────┬─────────────┬─────────────────┬──────────────┐
+│ Server    │ Address    │ Port │ Connections │ State           │ GTID         │
+├───────────┼────────────┼──────┼─────────────┼─────────────────┼──────────────┤
+│ MariaDB-1 │ 172.20.0.2 │ 3306 │ 1           │ Master, Running │ 1-1000-45818 │
+├───────────┼────────────┼──────┼─────────────┼─────────────────┼──────────────┤
+│ MariaDB-2 │ 172.20.0.3 │ 3306 │ 0           │ Slave, Running  │ 1-1000-42507 │
+├───────────┼────────────┼──────┼─────────────┼─────────────────┼──────────────┤
+│ MariaDB-3 │ 172.20.0.4 │ 3306 │ 1           │ Slave, Running  │ 1-2000-44545 │
+└───────────┴────────────┴──────┴─────────────┴─────────────────┴──────────────┘
+```
  
 Refer to the `./conf` folder (`max.cnf`, `mariadb1.cnf`, `mariadb2.cnf`, and `mariadb3.cnf`), for details on what is configured for all the nodes.
  

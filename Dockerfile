@@ -21,7 +21,7 @@ RUN yum -y -q install wget && \
     chmod +x mariadb_es_repo_setup && \
     ./mariadb_es_repo_setup --token="${ES_TOKEN}" --apply --mariadb-server-version="${SERVER_VERSION}"
 
-RUN echo "Token: ${ES_TOKEN}" && echo "Server Version: ${SERVER_VERSION}" && echo "Port: ${PORT}"
+# RUN echo "Token: ${ES_TOKEN}" && echo "Server Version: ${SERVER_VERSION}" && echo "Port: ${PORT}"
 
 # Create Persistent Volumes
 # VOLUME ["/etc/my.cnf.d","/var/lib/mysql"]
@@ -35,4 +35,5 @@ LABEL version="10.5"
 LABEL description="MariaDB ES Server"
 
 # Start the service
-CMD test -d /var/run/mariadb || mkdir -p /var/run/mariadb; chmod 0777 /var/lib/mysql; chmod 0777 /var/run/mariadb; /usr/sbin/mariadbd --basedir=/usr --datadir=/var/lib/mysql --user=mysql
+# CMD test -d /var/run/mariadb || mkdir -p /var/run/mariadb; chmod 0777 /var/lib/mysql; chmod 0777 /var/run/mariadb; /usr/sbin/mariadbd --basedir=/usr --datadir=/var/lib/mysql --user=mysql
+CMD /usr/sbin/mariadbd --basedir=/usr --datadir=/var/lib/mysql --user=mysql

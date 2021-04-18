@@ -3,19 +3,19 @@ threads=auto
 admin_host=0.0.0.0
 admin_secure_gui=false
 
-[server1]
+[MariaDB-1]
 type=server
 address=172.20.0.2
 port=3306
 protocol=MariaDBBackend
 
-[server2]
+[MariaDB-2]
 type=server
 address=172.20.0.3
 port=3306
 protocol=MariaDBBackend
 
-[server3]
+[MariaDB-3]
 type=server
 address=172.20.0.4
 port=3306
@@ -24,14 +24,14 @@ protocol=MariaDBBackend
 [MariaDB-Monitor]
 type=monitor
 module=mariadbmon
-servers=server1,server2,server3
+servers=MariaDB-1,MariaDB-2,MariaDB-3
 user=maxuser
 password=P@ssw0rd
 replication_user=repl_user
 replication_password=P@ssw0rd
 auto_failover=true
 auto_rejoin=true
-monitor_interval=1000
+monitor_interval=300
 failcount=2
 switchover_timeout=20
 failover_timeout=20
@@ -42,7 +42,7 @@ cooperative_monitoring_locks=majority_of_all
 [Read-Write-Service]
 type=service
 router=readwritesplit
-servers=server1,server2,server3
+servers=MariaDB-1,MariaDB-2,MariaDB-3
 user=maxuser
 password=P@ssw0rd
 master_reconnection=1
@@ -66,7 +66,7 @@ address=0.0.0.0
 [Masked-Read-Write-Service]
 type=service
 router=readwritesplit
-servers=server1,server2,server3
+servers=MariaDB-1,MariaDB-2,MariaDB-3
 user=maxuser
 password=P@ssw0rd
 master_reconnection=1

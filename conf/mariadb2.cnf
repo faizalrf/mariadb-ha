@@ -15,28 +15,10 @@
 # * Galera-related settings
 #
 [galera]
-# Mandatory settings
-#wsrep_on=ON
-#wsrep_provider=
-#wsrep_cluster_address=
-#binlog_format=row
-#default_storage_engine=InnoDB
-#innodb_autoinc_lock_mode=2
-#
-# Allow server to accept connections on all interfaces.
-#
-#bind-address=0.0.0.0
-#
-# Optional setting
-#wsrep_slave_threads=1
-#innodb_flush_log_at_trx_commit=0
 
 # this is only for embedded server
 [embedded]
 
-# This group is only read by MariaDB servers, not by MySQL.
-# If you use the same .cnf file for MySQL and MariaDB,
-# you can put MariaDB-only options here
 [mariadb]
 log_error=server.log
 log_bin
@@ -49,10 +31,8 @@ session_track_system_variables=last_gtid
 shutdown_wait_for_slaves=ON
 innodb_flush_log_at_trx_commit=1
 sync_binlog=1
+
 rpl_semi_sync_master_enabled=ON
 rpl_semi_sync_slave_enabled=ON
 
-# This group is only read by MariaDB-10.3 servers.
-# If you use the same .cnf file for MariaDB of different versions,
-# use this group for options that older servers don't understand
 [mariadb-10.3]
