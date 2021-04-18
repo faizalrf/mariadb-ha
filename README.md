@@ -13,12 +13,12 @@ DEFAULT_PORT=3306
 ***Note:** All the `docker-compose` commands needs to be executed from within the `mariadb-ha` folder, while the other scripts can be executed from anywhere.*
  
 - `DOWNLOAD_TOKEN=<Your MariaDB Enterprise Download Token>`
- - This token can be retrieved from <https://mariadb.com/docs/deploy/token/>
+  - This token can be retrieved from <https://mariadb.com/docs/deploy/token/> but you must have an a MariaDB enterprise account.
 - `MARIADB_VERSION=10.5`
- - Is hardcoded to 10.5, but feel free to change.
- - There are some configurations that are dependant on 10.5 which you might have to remove if you plan to use an older version.
+  - Is hardcoded to 10.5, but feel free to change.
+  - There are some configurations that are dependant on 10.5 which you might have to remove if you plan to use an older version.
 - `DEFAULT_PORT=3306`
- - Just the default MariaDB port, in case you need to use a different one.
+  - Just the default MariaDB port, in case you need to use a different one.
  
 Once the `.env` has been created, execute the `./deploy` script to or execute the following steps manually to set the cluster up
  
@@ -40,12 +40,12 @@ This will be using CentOS 8 containers and will:
 - Set up MaxScale with some generic filters and firewall rules as examples
 - Enable Transaction replay and Causal Reads for MaxScale
 - Enable Cooperative Monitoring
- - `majority_of_all`
- - `majority_of_running`
+  - `majority_of_all`
+  - `majority_of_running`
 - Enable MaxScale GUI
- - To Access GUI, on the browser, go to the following URLs, the user/password are `admin`/`mariadb`
-   -  <http://172.20.0.5:8989> for MaxScale #1 GUI
-   -  <http://172.20.0.6:8989> for MaxScale #2 GUI
+  - To Access GUI, on the browser, go to the following URLs, the user/password are `admin`/`mariadb`
+    -  <http://172.20.0.5:8989> for MaxScale #1 GUI
+    -  <http://172.20.0.6:8989> for MaxScale #2 GUI
  
 ## Connect to the Containers
  
@@ -78,15 +78,15 @@ If we want to connect to the MariaDB services through an external MariaDB client
  
 - To Connect to MaxScale MariaDB Service, take note of the MaxScale IP and its Read/Write service port `4006`
  
- ```
- $ mariadb -uapp_user -p -h172.20.0.5 -P4006
- ```
+  ```
+  $ mariadb -uapp_user -p -h172.20.0.5 -P4006
+  ```
  
 - To Connect to one of the MariaDB Service, take note of the MariaDB server IP and its default port `3306`
  
- ```
- $ mariadb -uapp_user -p -h172.20.0.2 -P3306
- ```
+  ```
+  $ mariadb -uapp_user -p -h172.20.0.2 -P3306
+  ```
  
 ***Note:** The IP addresses can be retrieved from the `docker-compose.yml` file.*
  
@@ -95,6 +95,27 @@ There is a couple of scripts under `./scripts/loop_mx1.sh` & `./scripts/loop_mx2
 Refer to the `./conf` folder (`max.cnf`, `mariadb1.cnf`, `mariadb2.cnf`, and `mariadb3.cnf`), for details on what is configured for all the nodes.
  
 Destroy the environment by simply going to the `mariadb-ha` folder and executing `docker-compose down`
- 
+
+## Using MariaDB Community Version
+
+If you want to use the MariaDB community version instead of the enterprise version, you will have to 
+
+- Modify the `docker-compose.yml` file by removing the following block from all the three server nodes
+
+```
+        build:
+            context: .
+            args:
+                SERVER_VERSION: ${MARIADB_VERSION}
+                ES_TOKEN: ${DOWNLOAD_TOKEN}
+                PORT: ${DEFAULT_PORT}
+```
+
+- Change the `image: mariadb-es` to `image: mariadb/server`
+- Remove/Comment the `shutdown_wait_for_slaves=ON` argument in all of the `mariadb1.cnf`, `mariadb1.cnf`, and `mariadb1.cnf` files.
+  - This particular configuration improves the stability and durability of the replication setup and is only available in the Enterprise version of the MariaDB server.
+
+Deploy as per normal using the `./deploy` script from within the `mariadb-ha` folder.
+
 ## Thank you!
 
