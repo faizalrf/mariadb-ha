@@ -22,6 +22,7 @@ services:
                 ipv4_address: 172.20.0.2
         volumes:
             - ./init/server1:/tmp/init
+            - ./init/reset:/tmp/reset
             - ./conf/mariadb1.cnf:/etc/my.cnf.d/server.cnf
         mem_limit: 2G
 
@@ -45,6 +46,7 @@ services:
                 ipv4_address: 172.20.0.3
         volumes:
             - ./init/others:/tmp/init
+            - ./init/reset:/tmp/reset
             - ./conf/mariadb2.cnf:/etc/my.cnf.d/server.cnf
         depends_on:
             - "server1"
@@ -70,6 +72,7 @@ services:
                 ipv4_address: 172.20.0.4
         volumes:
             - ./init/others:/tmp/init
+            - ./init/reset:/tmp/reset
             - ./conf/mariadb3.cnf:/etc/my.cnf.d/server.cnf
         depends_on:
             - "server2"

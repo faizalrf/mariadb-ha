@@ -16,7 +16,6 @@
 #
 [galera]
 
-# this is only for embedded server
 [embedded]
 
 [mariadb]
@@ -32,7 +31,8 @@ shutdown_wait_for_slaves=ON
 innodb_flush_log_at_trx_commit=1
 sync_binlog=1
 
-rpl_semi_sync_master_enabled=ON
-rpl_semi_sync_slave_enabled=ON
+# rpl_semi_sync_master_enabled=ON
+# rpl_semi_sync_slave_enabled=ON
+# rpl_semi_sync_master_wait_point=AFTER_SYNC
 
 [mariadb-10.3]
