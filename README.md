@@ -98,7 +98,17 @@ If we want to connect to the MariaDB services through an external MariaDB client
  
 ***Note:** The IP addresses can be retrieved from the `docker-compose.yml` file.*
  
-There is a couple of scripts under `./scripts/loop_mx1.sh` & `./scripts/loop_mx2.sh` which can be used to push some transactions to the MariaDB through the MaxScale1 and MaxScale 2 respectively. These are super useful for testing the behavior of Read/Write splitting service and how Causal reads can provide a consistent reading behavior and how Transaction Replay improves high availability when MariaDB nodes go down. Furthermore, the cooperative monitoring parameters can help simplify running Two MaxScale without worrying about which of these MaxScale nodes will take care of MariaDB automatic failover/rejoin.
+There is a four of scripts under `/scripts`
+- `./scripts/loop_mx1.sh`
+  - Simulates reads and writes using the same connection on MaxScale 1
+- `./scripts/loop_global_mx1.sh`
+  - Simulates reads and writes using different connections on MaxScale 1
+- `./scripts/loop_mx2.sh`
+  - Simulates reads and writes using the same connection on MaxScale 1
+- `./scripts/loop_global_mx2.sh`
+  - Simulates reads and writes using different connection on MaxScale 1
+
+which can be used to push some transactions to the MariaDB through the MaxScale1 and MaxScale 2 respectively. These are super useful for testing the behavior of Read/Write splitting service and how Causal reads can provide a consistent reading behavior and how Transaction Replay improves high availability when MariaDB nodes go down. Furthermore, the cooperative monitoring parameters can help simplify running Two MaxScale without worrying about which of these MaxScale nodes will take care of MariaDB automatic failover/rejoin.
 
 One great feature of MaxScale is, while it can do this automatically, but there might be a need to manually do a switchover. To switchover Primary node from `MariaDB-2` to `MariaDB-1` node, we can execute the `maxctrl` `switchover` command as follows from within the MaxScale node.
 
