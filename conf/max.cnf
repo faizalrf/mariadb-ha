@@ -46,6 +46,7 @@ servers=MariaDB-1,MariaDB-2,MariaDB-3
 user=maxuser
 password=P@ssw0rd
 master_reconnection=1
+master_accept_reads=1
 
 # causal_reads can be one of (none, true/local, global, fast)
 #causal_reads=true

@@ -7,5 +7,8 @@ SET GLOBAL GTID_SLAVE_POS='';
 -- Set nodes to start replicaiton from `mariadb1` node
 CHANGE MASTER TO MASTER_HOST='mariadb1', MASTER_USER='repl_user', MASTER_PASSWORD='P@ssw0rd', MASTER_PORT=3306, MASTER_USE_GTID=slave_pos;
 
+-- Make it as a read-only node, which is required for a Replica
+SET GLOBAL READ_ONLY=1;
+
 -- Start the Slave process
 START SLAVE;
