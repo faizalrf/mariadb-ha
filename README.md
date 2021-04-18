@@ -1,5 +1,13 @@
 # MariaDB HA Setup
- 
+
+## Assumptions
+
+- `docker-compose version 1.29.1` 
+- `Docker version 20.10.6, build 370c289`
+- Should work on MacOS/Windows & Linux running the above versions
+
+## The Setup
+
 This will set up a MariaDB Enterprise server in a 3 MariaDB node + two MaxScale nodes setup.
  
 Create a `.env` file under `mariadb-ha` folder (which contains `docker-compose.yml` file), with the following values
@@ -30,7 +38,7 @@ docker container exec mariadb2 bash -c "mariadb < /tmp/init/02.sql"
 docker container exec mariadb3 bash -c "mariadb < /tmp/init/02.sql"
 ```
  
-## The Setup
+## What will be done
  
 This will be using CentOS 8 containers and will:
  
