@@ -3,7 +3,7 @@
         {
             "replace": {
                 "column": "nric",
-                "match": "^.{0,6}"
+                "match": "^.{0,5}"
             },
             "with": {
                 "fill": "*"
