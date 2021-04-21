@@ -5,6 +5,8 @@
 - `docker-compose version 1.29.1` 
 - `Docker version 20.10.6, build 370c289`
 - Should work on MacOS/Windows & Linux running the above versions
+- `MariaDB-client 10.5` is installed on the machine where this `docker-compose` is going to run
+- There might be some networking related issues when running this on Windows, but it should work fine on MacOS / Linux distros
 
 ## The Setup
 
