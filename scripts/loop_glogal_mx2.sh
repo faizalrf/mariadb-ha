@@ -14,7 +14,7 @@ do
     iStmt="INSERT INTO testdb.tab2(c1) VALUES (CONCAT('Data - ', ROUND(RAND() * 100000, 0)));"
     mariadb -N -u ${UserName} -p${PassWord} -h${maxHost} -P${Port} -e "${iStmt}"
     
-    iStmt="SELECT concat('$(tput setaf 7)Executing SELECT on ', @@hostname, '  -  $(tput setaf 3)MaxScale [${maxHost}]$(tput setaf 7) -> ID Retrieved: '), 
+    iStmt="SELECT concat('$(tput setaf 7)SELECT on ', @@hostname, '  -  $(tput setaf 3)MaxPort [${Port}]$(tput setaf 7) ->'), 
                     rpad(coalesce(id, ':(', id), 10, '.'), 
                         IF(COUNT(*)> 0, '$(tput setaf 2)Record Found!$(tput setaf 7)','$(tput setaf 1)! Not Found !$(tput setaf 7)' ) 
                 FROM testdb.tab2 WHERE id = $i;"
