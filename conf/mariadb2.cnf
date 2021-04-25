@@ -27,7 +27,11 @@ log_slave_updates=1
 gtid_strict_mode=1
 max_statement_time=300
 session_track_system_variables=last_gtid
-shutdown_wait_for_slaves=ON
+
+## This is only available with the MariaDB Enterprise builds
+# shutdown_wait_for_slaves=ON
+##
+
 innodb_flush_log_at_trx_commit=1
 sync_binlog=1
 
