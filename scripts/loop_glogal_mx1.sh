@@ -11,7 +11,7 @@ mariadb -u ${UserName} -p${PassWord} -h${maxHost} -P${Port} -e "CREATE DATABASE 
 i=1
 while [ $? -eq 0 ]
 do
-    iStmt="INSERT INTO testdb.tab(c1) VALUES (CONCAT('Data - ', ROUND(RAND() * 100000, 0)));"
+    iStmt="INSERT INTO testdb.tab(id, c1) VALUES ($i, CONCAT('Data - ', ROUND(RAND() * 100000, 0)));"
     mariadb -N -u ${UserName} -p${PassWord} -h${maxHost} -P${Port} -e "${iStmt}"
     
     iStmt="SELECT concat('$(tput setaf 7)SELECT on ', @@hostname, '  -  $(tput setaf 3)MaxPort [${Port}]$(tput setaf 7) -> '), 
@@ -21,5 +21,5 @@ do
     output=$(mariadb -N -u ${UserName} -p${PassWord} -h${maxHost} -P${Port} -e "${iStmt}")
     echo ${output}
     i=$((i+1))
-    sleep 0.015
+    sleep 0.01
 done
