@@ -23,5 +23,5 @@ do
     output=$(mariadb -N -u ${UserName} -p${PassWord} -h${maxHost} -P${Port} -e "${iStmt}")
     echo ${output}
     i=$((i+1))
-    sleep 0.01
+    #sleep 0.01
 done
