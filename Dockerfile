@@ -1,7 +1,7 @@
 # vim:set ft=dockerfile:
 
-# Pull the CentOS7 image
-FROM centos:latest
+# Pull the CentOS 8 image
+FROM centos:8
 USER root
 
 # Update System
