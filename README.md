@@ -30,7 +30,7 @@ DEFAULT_PORT=3306
 - `DEFAULT_PORT=3306`
   - Just the default MariaDB port, in case you need to use a different one.
  
-Once the `.env` has been created, execute the `./deploy` script to or execute the following steps manually to set the cluster up
+Once the `.env` has been created, execute the `./deploy` script or execute the following steps manually to set the cluster up
  
 ```
 docker-compose up --detach --build
