@@ -4,7 +4,14 @@
 # Creates a table and starts inserting and reading values from it outside of a
 # transaction with autocommit=1.
 #
-# 4601/4602
+# MaxScale port is configured as 4007
+if [ $# -ne 1 ]; then
+    echo "Illegal number of parameters, please specify the port to connect to"
+    echo "Verify the Read/Write port within the MaxScale configuration /etc/maxscale.cnf"
+    echo 
+    exit 1
+fi
+
 maxHost=127.0.0.1
 Port=$1
 TableName=tab2
