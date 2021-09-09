@@ -38,6 +38,7 @@ failover_timeout=20
 
 cooperative_monitoring_locks=majority_of_all
 #cooperative_monitoring_locks=majority_of_running
+master_conditions=none
 
 [Read-Write-Service]
 type=service
