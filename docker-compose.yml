@@ -7,7 +7,7 @@ services:
             context: .
             args:
                 SERVER_VERSION: ${MARIADB_VERSION}
-                ES_TOKEN: ${DOWNLOAD_TOKEN}
+                #ES_TOKEN: ${DOWNLOAD_TOKEN}
                 PORT: ${DEFAULT_PORT}
         image: mariadb-es
         hostname: mariadb1
@@ -31,7 +31,7 @@ services:
             context: .
             args:
                 SERVER_VERSION: ${MARIADB_VERSION}
-                ES_TOKEN: ${DOWNLOAD_TOKEN}
+                #ES_TOKEN: ${DOWNLOAD_TOKEN}
                 PORT: ${DEFAULT_PORT}
         image: mariadb-es
         hostname: mariadb2
@@ -57,7 +57,7 @@ services:
             context: .
             args:
                 SERVER_VERSION: ${MARIADB_VERSION}
-                ES_TOKEN: ${DOWNLOAD_TOKEN}
+                #ES_TOKEN: ${DOWNLOAD_TOKEN}
                 PORT: ${DEFAULT_PORT}
         image: mariadb-es
         hostname: mariadb3
