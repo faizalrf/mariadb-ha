@@ -4,6 +4,10 @@ echo "y" | docker volume prune
 
 docker-compose up --detach --build
 
-sleep 5
+sleep 10
+docker container exec mariadb1 bash -c "mariadb -uroot < /tmp/init/01.sql"
+docker container exec mariadb2 bash -c "mariadb -uroot < /tmp/init/01.sql"
+docker container exec mariadb3 bash -c "mariadb -uroot < /tmp/init/01.sql"
 
+sleep 10
 ./reset_replication
