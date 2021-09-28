@@ -1,0 +1,15 @@
+#!/bin/bash
+echo
+echo "This will reset the replciation status of all nodes..."
+
+docker container exec mariadb1 bash -c "mariadb -uroot < /tmp/init/primary.sql"
+docker container exec mariadb2 bash -c "mariadb -uroot < /tmp/init/replica.sql"
+docker container exec mariadb3 bash -c "mariadb -uroot < /tmp/init/replica.sql"
+
+docker container exec mariadb1 bash -c "mariadb -uroot < /tmp/init/01.sql"
+docker container exec mariadb2 bash -c "mariadb -uroot < /tmp/init/01.sql"
+docker container exec mariadb3 bash -c "mariadb -uroot < /tmp/init/01.sql"
+
+echo
+echo "Reset complated!"
+echo

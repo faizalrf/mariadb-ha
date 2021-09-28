@@ -46,8 +46,6 @@ router=readwritesplit
 servers=MariaDB-1,MariaDB-2,MariaDB-3
 user=maxuser
 password=P@ssw0rd
-master_reconnection=1
-# master_accept_reads=1
 
 # causal_reads can be one of (none, true/local, global, fast)
 #causal_reads=true
@@ -56,6 +54,12 @@ causal_reads_timeout=1s
 # To ensure the failed transaction due to a Primary node failure is executed again on the new Primary node
 #transaction_replay=true
 delayed_retry_timeout=120s
+slave_selection_criteria=ADAPTIVE_ROUTING
+master_accept_reads=true
+master_reconnection=true
+delayed_retry=true
+prune_sescmd_history=true
+lazy_connect=true
 
 filters=Result-Limit|Firewall-Blacklist
 
