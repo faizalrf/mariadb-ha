@@ -1,81 +1,63 @@
 version: '3'
-
 services:
-
     server1:
         build:
             context: .
-            args:
-                SERVER_VERSION: ${MARIADB_VERSION}
-                ES_TOKEN: ${DOWNLOAD_TOKEN}
-                PORT: ${DEFAULT_PORT}
         image: mariadb-es
         hostname: mariadb1
         container_name: mariadb1
         privileged: true
-        env_file:
-            - .env        
+        environment:
+            MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'Y'
         ports:
             - 3301:3306
         networks:
             static-network:
                 ipv4_address: 172.20.0.2
         volumes:
-            - ./init/server1:/tmp/init
-            - ./init/reset:/tmp/reset
-            - ./conf/mariadb1.cnf:/etc/my.cnf.d/server.cnf
+            - ./init:/tmp/init
+            - ./conf/mariadb1.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf
         mem_limit: 2G
-
     server2:
         build:
             context: .
-            args:
-                SERVER_VERSION: ${MARIADB_VERSION}
-                ES_TOKEN: ${DOWNLOAD_TOKEN}
-                PORT: ${DEFAULT_PORT}
         image: mariadb-es
         hostname: mariadb2
         container_name: mariadb2
         privileged: true
-        env_file:
-            - .env        
+        environment:
+            MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'Y'
         ports:
             - 3302:3306
         networks:
             static-network:
                 ipv4_address: 172.20.0.3
         volumes:
-            - ./init/others:/tmp/init
-            - ./init/reset:/tmp/reset
-            - ./conf/mariadb2.cnf:/etc/my.cnf.d/server.cnf
+            - ./init:/tmp/init
+            - ./conf/mariadb2.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf
         depends_on:
-            - "server1"
+            - server1
         mem_limit: 2G
         
     server3:
         build:
             context: .
-            args:
-                SERVER_VERSION: ${MARIADB_VERSION}
-                ES_TOKEN: ${DOWNLOAD_TOKEN}
-                PORT: ${DEFAULT_PORT}
         image: mariadb-es
         hostname: mariadb3
         container_name: mariadb3
         privileged: true
-        env_file:
-            - .env        
+        environment:
+            MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'Y'
         ports:
             - 3303:3306
         networks:
             static-network:
                 ipv4_address: 172.20.0.4
         volumes:
-            - ./init/others:/tmp/init
-            - ./init/reset:/tmp/reset
-            - ./conf/mariadb3.cnf:/etc/my.cnf.d/server.cnf
+            - ./init:/tmp/init
+            - ./conf/mariadb3.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf
         depends_on:
-            - "server2"
+            - server1
         mem_limit: 2G
                         
     maxs1:
@@ -83,8 +65,6 @@ services:
         container_name: max1
         image: mariadb/maxscale
         privileged: true
-        env_file:
-            - .env        
         ports:
             - 4601:4006
             - 4701:4007
@@ -101,15 +81,12 @@ services:
         mem_limit: 256M
         networks:
             static-network:
-                ipv4_address: 172.20.0.5
-            
+                ipv4_address: 172.20.0.5   
     maxs2:
         hostname: max2
         container_name: max2
         image: mariadb/maxscale
         privileged: true
-        env_file:
-            - .env        
         ports:
             - 4602:4006
             - 4702:4007
@@ -132,14 +109,13 @@ services:
             - server1
             - server2
             - server3
-
 networks:
     static-network:
+        name: static-network
         ipam:
             config:
                 - subnet: 172.20.0.0/16
                   ip_range: 172.20.5.0/24
                   gateway: 172.20.5.254
-
 volumes:
     maxscale:

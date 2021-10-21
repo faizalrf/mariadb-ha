@@ -6,7 +6,7 @@
 #
 maxHost=127.0.0.1
 Port=4601
-TableName=tab
+TableName=tab1
 
 mariadb -u ${UserName} -p${PassWord} -h${maxHost} -P${Port} -e "CREATE DATABASE IF NOT EXISTS testdb; CREATE OR REPLACE TABLE testdb.${TableName} (id serial, c1 varchar(100), ts timestamp(6));"
 
@@ -23,5 +23,5 @@ do
     output=$(mariadb -N -u ${UserName} -p${PassWord} -h${maxHost} -P${Port} -e "${iStmt}")
     echo ${output}
     i=$((i+1))
-    sleep 0.01
+    #sleep 0.01
 done
