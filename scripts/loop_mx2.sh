@@ -5,16 +5,9 @@
 # transaction with autocommit=1.
 #
 # MaxScale port is configured as 4602
-if [ $# -ne 1 ]; then
-    echo "Illegal number of parameters, please specify the port to connect to"
-    echo "Verify the Read/Write port within the MaxScale configuration /etc/maxscale.cnf"
-    echo "For this test, Max1: 4701 & Max2: 4702"
-    echo 
-    exit 1
-fi
 
 maxHost=127.0.0.1
-Port=$1
+Port=4602
 TableName=tab2
 
 mariadb -u ${UserName} -p${PassWord} -h${maxHost} -P${Port} -e "DROP DATABASE IF EXISTS testdb; CREATE DATABASE IF NOT EXISTS testdb; CREATE TABLE IF NOT EXISTS testdb.${TableName} (id serial, c1 varchar(100), ts timestamp(6));"
