@@ -60,8 +60,23 @@ master_reconnection=true
 delayed_retry=true
 prune_sescmd_history=true
 lazy_connect=true
-
 filters=Result-Limit|Firewall-Blacklist
+
+[Read-Service-During-Batch]
+type=service
+router=readconnroute
+servers=MariaDB-1,MariaDB-2,MariaDB-3
+user=maxuser
+password=P@ssw0rd
+router_options=slave
+
+[Read-Service-After-Batch]
+type=service
+router=readconnroute
+servers=MariaDB-1,MariaDB-2,MariaDB-3
+user=maxuser
+password=P@ssw0rd
+router_options=master
 
 [Read-Write-Listener]
 type=listener
