@@ -35,6 +35,8 @@ session_track_system_variables=last_gtid
 innodb_flush_log_at_trx_commit=1
 sync_binlog=1
 relay_log_recovery = ON
+auto_increment_increment=3
+auto_increment_offset=1
 
 #slave_parallel_mode = optimistic
 #slave_parallel_threads = 4
