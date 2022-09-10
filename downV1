@@ -1,0 +1,4 @@
+#!/bin/bash
+docker-compose down
+echo "Y" | docker volume prune
+echo "Done!"
