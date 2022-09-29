@@ -60,6 +60,7 @@ master_reconnection=true
 delayed_retry=true
 prune_sescmd_history=true
 lazy_connect=true
+#max_slave_connections=0
 filters=Result-Limit|Firewall-Blacklist
 
 [Read-Service-During-Batch]
@@ -102,7 +103,8 @@ master_reconnection=1
 #transaction_replay=true
 delayed_retry_timeout=120s
 
-filters=Result-Limit|Firewall-Blacklist|Data-Masking
+#filters=Result-Limit|Firewall-Blacklist|Data-Masking
+filters=QLAFilter
 
 [Masked-Read-Write-Listener]
 type=listener
@@ -131,5 +133,27 @@ type=filter
 module=dbfwfilter
 action=block
 rules=/var/lib/maxscale/firewall.rule
+
+[QLAFilter]
+type=filter
+module=qlafilter
+match=(?i)select.*from|(?i)insert.*into
+filebase=/tmp/SqlQueryLog
+user=john
+flush=true
+
+[SELECT-QLAFilter]
+type=filter
+module=qlafilter
+match=(?i)select.*from.*
+filebase=/tmp/SqlQueryLog
+flush=true
+
+[INSERT-QLAFilter]
+type=filter
+module=qlafilter
+match=(?i)insert.*into.*
+filebase=/tmp/SqlQueryLog
+flush=true
 
 # EOF
