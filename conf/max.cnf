@@ -31,14 +31,13 @@ replication_user=repl_user
 replication_password=P@ssw0rd
 auto_failover=true
 auto_rejoin=true
-monitor_interval=300
-failcount=2
+monitor_interval=1000
+failcount=3
 switchover_timeout=20
 failover_timeout=20
 
 #cooperative_monitoring_locks=majority_of_all
 cooperative_monitoring_locks=majority_of_running
-master_conditions=none
 
 [Read-Write-Service]
 type=service
@@ -53,6 +52,10 @@ causal_reads_timeout=1s
 
 # To ensure the failed transaction due to a Primary node failure is executed again on the new Primary node
 transaction_replay=true
+
+# This is required if LAST_INSERT_ID() is used in the code
+transaction_replay_checksum=no_insert_id
+
 delayed_retry_timeout=120s
 slave_selection_criteria=ADAPTIVE_ROUTING
 master_accept_reads=true
@@ -61,23 +64,6 @@ delayed_retry=true
 prune_sescmd_history=true
 #lazy_connect=true
 #max_slave_connections=0
-#filters=Result-Limit|Firewall-Blacklist
-
-[Read-Service-During-Batch]
-type=service
-router=readconnroute
-servers=MariaDB-1,MariaDB-2,MariaDB-3
-user=maxuser
-password=P@ssw0rd
-router_options=slave
-
-[Read-Service-After-Batch]
-type=service
-router=readconnroute
-servers=MariaDB-1,MariaDB-2,MariaDB-3
-user=maxuser
-password=P@ssw0rd
-router_options=master
 
 [Read-Write-Listener]
 type=listener
@@ -86,74 +72,11 @@ protocol=MariaDBClient
 port=4006
 address=0.0.0.0
 
-[Masked-Read-Write-Service]
-type=service
-router=readwritesplit
-servers=MariaDB-1,MariaDB-2,MariaDB-3
-user=maxuser
-password=P@ssw0rd
-master_reconnection=1
-master_accept_reads=1
-
-# causal_reads can be one of (none, true/local, global, fast)
-causal_reads=global
-causal_reads_timeout=1s
-
-# To ensure the failed transaction due to a Primary node failure is executed again on the new Primary node
-transaction_replay=true
-delayed_retry_timeout=120s
-
-#filters=Result-Limit|Firewall-Blacklist|Data-Masking
-filters=QLAFilter
-
-[Masked-Read-Write-Listener]
-type=listener
-service=Masked-Read-Write-Service
-protocol=MariaDBClient
-port=4007
-address=0.0.0.0
-
 [Data-Masking]
 type=filter
 module=masking
 warn_type_mismatch=never
 large_payload=abort
 rules=/var/lib/maxscale/filter.json
-
-[Result-Limit]
-type=filter
-module=maxrows
-debug=0
-max_resultset_return=error
-max_resultset_rows=1000
-max_resultset_size=65536
-
-[Firewall-Blacklist]
-type=filter
-module=dbfwfilter
-action=block
-rules=/var/lib/maxscale/firewall.rule
-
-[QLAFilter]
-type=filter
-module=qlafilter
-match=(?i)select.*from|(?i)insert.*into
-filebase=/tmp/SqlQueryLog
-user=john
-flush=true
-
-[SELECT-QLAFilter]
-type=filter
-module=qlafilter
-match=(?i)select.*from.*
-filebase=/tmp/SqlQueryLog
-flush=true
-
-[INSERT-QLAFilter]
-type=filter
-module=qlafilter
-match=(?i)insert.*into.*
-filebase=/tmp/SqlQueryLog
-flush=true
 
 # EOF
