@@ -26,6 +26,7 @@ server_id=1000
 log_slave_updates=1
 gtid_strict_mode=1
 max_statement_time=300
+max_connections=1200
 session_track_system_variables=last_gtid
 
 ## This is only available with the MariaDB Enterprise builds
@@ -38,8 +39,8 @@ relay_log_recovery = ON
 #auto_increment_increment=3
 #auto_increment_offset=1
 
-#slave_parallel_mode = optimistic
-#slave_parallel_threads = 4
+slave_parallel_mode = optimistic
+slave_parallel_threads = 12
 
 # Enable the following to activate Semi-Sync replication
 # rpl_semi_sync_master_enabled=ON

@@ -16,3 +16,5 @@ INSERT INTO employee (nric, name, phone) values ('S7162688Z', 'James Bond', '918
                                                 ('S6866688F', 'Indiana Jones', '90065111'),
                                                 ('S9712622G', 'Daffy Duck', '81110001'),
                                                 ('S6562345X', 'John Carter', '99965312');
+
+CREATE TABLE products(id serial, c varchar(100));

@@ -36,8 +36,8 @@ failcount=2
 switchover_timeout=20
 failover_timeout=20
 
-cooperative_monitoring_locks=majority_of_all
-#cooperative_monitoring_locks=majority_of_running
+#cooperative_monitoring_locks=majority_of_all
+cooperative_monitoring_locks=majority_of_running
 master_conditions=none
 
 [Read-Write-Service]
@@ -59,7 +59,7 @@ master_accept_reads=true
 master_reconnection=true
 delayed_retry=true
 prune_sescmd_history=true
-lazy_connect=true
+#lazy_connect=true
 #max_slave_connections=0
 #filters=Result-Limit|Firewall-Blacklist
 
@@ -93,14 +93,14 @@ servers=MariaDB-1,MariaDB-2,MariaDB-3
 user=maxuser
 password=P@ssw0rd
 master_reconnection=1
-#master_accept_reads=1
+master_accept_reads=1
 
 # causal_reads can be one of (none, true/local, global, fast)
-#causal_reads=global
-#causal_reads_timeout=1s
+causal_reads=global
+causal_reads_timeout=1s
 
 # To ensure the failed transaction due to a Primary node failure is executed again on the new Primary node
-#transaction_replay=true
+transaction_replay=true
 delayed_retry_timeout=120s
 
 #filters=Result-Limit|Firewall-Blacklist|Data-Masking
