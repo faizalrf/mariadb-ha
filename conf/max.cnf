@@ -31,10 +31,10 @@ replication_user=repl_user
 replication_password=P@ssw0rd
 auto_failover=true
 auto_rejoin=true
-monitor_interval=1000
+monitor_interval=1s
 failcount=3
-switchover_timeout=20
-failover_timeout=20
+switchover_timeout=20s
+failover_timeout=20s
 
 #cooperative_monitoring_locks=majority_of_all
 cooperative_monitoring_locks=majority_of_running
@@ -46,8 +46,8 @@ servers=MariaDB-1,MariaDB-2,MariaDB-3
 user=maxuser
 password=P@ssw0rd
 
-# causal_reads can be one of (none, true/local, global, fast)
-causal_reads=global
+# causal_reads can be one of (none, true/local, global, fast, fast_global)
+causal_reads=fast_global
 causal_reads_timeout=1s
 
 # To ensure the failed transaction due to a Primary node failure is executed again on the new Primary node
@@ -58,7 +58,7 @@ transaction_replay_checksum=no_insert_id
 
 delayed_retry_timeout=120s
 slave_selection_criteria=ADAPTIVE_ROUTING
-master_accept_reads=true
+#master_accept_reads=true
 master_reconnection=true
 delayed_retry=true
 prune_sescmd_history=true

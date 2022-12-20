@@ -63,7 +63,7 @@ services:
     maxs1:
         hostname: max1
         container_name: max1
-        image: mariadb/maxscale:6.4.1
+        image: mariadb/maxscale:22.08
         privileged: true
         ports:
             - 4601:4006
@@ -85,7 +85,7 @@ services:
     maxs2:
         hostname: max2
         container_name: max2
-        image: mariadb/maxscale:6.4.1
+        image: mariadb/maxscale:22.08
         privileged: true
         ports:
             - 4602:4006

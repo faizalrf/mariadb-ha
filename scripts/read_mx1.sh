@@ -17,5 +17,6 @@ do
     echo -e "SELECT concat('SELECT FROM ${TableName} on ', @@hostname, ' - MaxPort [${Port}] ->'), rpad($i, 10, '.'), 
                 IF(COUNT(*)> 0, '\033[0;32mRecord Found\033[0m','\033[0;31m! Not Found !\033[0m' ) 
             FROM ${DBName}.${TableName} WHERE id = $i;"
-    sleep 0.04
+    ((i++))
+    sleep 0.1
 done | mariadb -N -u ${UserName} -p${PassWord} -h${maxHost} -P${Port}
