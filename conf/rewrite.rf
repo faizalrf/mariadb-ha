@@ -1,0 +1,6 @@
+%%
+case_sensitive: false
+%
+@{1:^}select @{2} from sharded_table
+%
+select @{2} from shard_202301

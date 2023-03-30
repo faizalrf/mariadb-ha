@@ -74,6 +74,7 @@ services:
             - ./conf/max.cnf:/etc/maxscale.cnf
             - ./conf/filter.json:/var/lib/maxscale/filter.json
             - ./conf/firewall.rule:/var/lib/maxscale/firewall.rule
+            - ./conf/rewrite.rf:/var/lib/maxscale/rewrite.rf
         links:
             - "server1"
             - "server2"
@@ -102,6 +103,7 @@ services:
             - ./conf/max.cnf:/etc/maxscale.cnf
             - ./conf/filter.json:/var/lib/maxscale/filter.json
             - ./conf/firewall.rule:/var/lib/maxscale/firewall.rule
+            - ./conf/rewrite.rf:/var/lib/maxscale/rewrite.rf
         networks:
             static-network:
                 ipv4_address: 172.20.0.6

@@ -47,7 +47,7 @@ user=maxuser
 password=P@ssw0rd
 
 # causal_reads can be one of (none, true/local, global, fast, fast_global)
-#causal_reads=true
+causal_reads=true
 causal_reads_timeout=1s
 
 # To ensure the failed transaction due to a Primary node failure is executed again on the new Primary node
@@ -62,8 +62,9 @@ slave_selection_criteria=ADAPTIVE_ROUTING
 master_reconnection=true
 delayed_retry=true
 prune_sescmd_history=true
-#lazy_connect=true
+lazy_connect=true
 #max_slave_connections=0
+#filters=Select_RegEX|Insert_RegEX|Update_RegEX|Delete_RegEX
 
 [Read-Write-Listener]
 type=listener
@@ -71,6 +72,34 @@ service=Read-Write-Service
 protocol=MariaDBClient
 port=4006
 address=0.0.0.0
+
+[Select_RegEX]
+type=filter
+module=regexfilter
+match=select(.*)sharded_table(.*)shard_key=([0-9]*)
+replace=select$1shard_$3$2shard_key=$3
+log_file=/tmp/regexfilter.log
+
+[Delete_RegEX]
+type=filter
+module=regexfilter
+match=delete(.*)from(.*)sharded_table(.*)where(.*)shard_key=([0-9]*)
+replace=delete$1from$2shard_$5$4where$3shard_key=$5
+log_file=/tmp/regexfilter.log
+
+[Update_RegEX]
+type=filter
+module=regexfilter
+match=update(.*)sharded_table(.*)where(.*)shard_key=([0-9]*)
+replace=update$1shard_$4$3$2where$3shard_key=$4
+log_file=/tmp/regexfilter.log
+
+[Insert_RegEX]
+type=filter
+module=regexfilter
+match=insert(.*)into(.*)sharded_table(.*)values(.*)([0-9]*)
+replace=insert$1into$2shard_$5$4values$3$2
+log_file=/tmp/regexfilter.log
 
 [Data-Masking]
 type=filter
