@@ -43,7 +43,7 @@ slave_parallel_mode = optimistic
 slave_parallel_threads = 12
 
 # Enable the following to activate Semi-Sync replication
-# rpl_semi_sync_master_enabled=ON
-# rpl_semi_sync_slave_enabled=ON
-# rpl_semi_sync_master_wait_point=AFTER_SYNC
+rpl_semi_sync_master_enabled=ON
+rpl_semi_sync_slave_enabled=ON
+rpl_semi_sync_master_wait_point=AFTER_SYNC
 
