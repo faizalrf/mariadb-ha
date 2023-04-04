@@ -16,7 +16,7 @@ Create a `.env` file under `mariadb-ha` folder (which contains `docker-compose.y
  
 ```
 DOWNLOAD_TOKEN=<MariaDB-Token>
-MARIADB_VERSION=10.6
+MRDB_VER=10.6
 MAXSCALE_VER=23.01
 TARGETARCH=amd64
 ```
