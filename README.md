@@ -2,10 +2,10 @@
 
 ## Assumptions
 
-- `docker-compose version 1.29.1` 
-- `Docker version 20.10.6, build 370c289`
+- `docker compose` 
+- `Docker`
 - Should work on MacOS/Windows & Linux running the above versions
-- `MariaDB-client 10.5` is installed on the machine where this `docker-compose` is going to run
+- `MariaDB-client` is installed on the machine where this `docker compose` is going to run
 - There might be some networking related issues when running this on Windows, but it should work fine on MacOS / Linux distros
 
 ## The Setup
@@ -15,21 +15,22 @@ This will set up a MariaDB Enterprise server in a 3 MariaDB node + two MaxScale 
 Create a `.env` file under `mariadb-ha` folder (which contains `docker-compose.yml` file), with the following values
  
 ```
-DOWNLOAD_TOKEN=
-MARIADB_VERSION=10.5
-DEFAULT_PORT=3306
+DOWNLOAD_TOKEN=<MariaDB-Token>
+MARIADB_VERSION=10.6
+MAXSCALE_VER=23.01
+TARGETARCH=amd64
 ```
  
 ***Note:** All the `docker-compose` commands needs to be executed from within the `mariadb-ha` folder, while the other scripts can be executed from anywhere.*
  
 - `DOWNLOAD_TOKEN=<Your MariaDB Enterprise Download Token>`
   - This token can be retrieved from <https://mariadb.com/docs/deploy/token/> but you must have an a MariaDB enterprise account.
-- `MARIADB_VERSION=10.5`
-  - Is hardcoded to 10.5, but feel free to change.
-  - There are some configurations that are dependant on 10.5 which you might have to remove if you plan to use an older version.
-- `DEFAULT_PORT=3306`
-  - Just the default MariaDB port, in case you need to use a different one.
- 
+- `MARIADB_VERSION=10.6`
+  - Is hardcoded to 10.6, but feel free to change.
+  - There are some configurations that are dependant on 10.6 which you might have to remove if you plan to use an older version.
+- `MAXSCALE_VER=23.01`
+  - MaxScale Version to use
+
 Once the `.env` has been created, execute the `./deploy` script or execute the following steps manually to set the cluster up
  
 ```
@@ -44,7 +45,7 @@ docker container exec mariadb3 bash -c "mariadb < /tmp/init/02.sql"
  
 This will be using CentOS 8 containers and will:
  
-- Install 2 MaxScale 2.5 nodes with static IP
+- Install 2 MaxScale 23.01 nodes with static IP
 - Install 3 MariaDB 10.5 enterprise servers nodes with static IP
 - Set up semi-synchronous replication between the MariaDB nodes
 - Set up MaxScale with some generic filters and firewall rules as examples
