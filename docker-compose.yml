@@ -4,7 +4,6 @@ services:
         build:
             context: .
             args:
-                TARGETARCH: amd64
                 TOKEN: ${DOWNLOAD_TOKEN}
                 MARIADB_VERSION: ${MRDB_VER}
         image: mariadb-es
@@ -26,7 +25,6 @@ services:
         build:
             context: .
             args:
-                TARGETARCH: amd64
                 TOKEN: ${DOWNLOAD_TOKEN}
                 MARIADB_VERSION: ${MRDB_VER}
         image: mariadb-es
@@ -46,12 +44,10 @@ services:
         depends_on:
             - server1
         mem_limit: 2G
-        
     server3:
         build:
             context: .
             args:
-                TARGETARCH: amd64
                 TOKEN: ${DOWNLOAD_TOKEN}
                 MARIADB_VERSION: ${MRDB_VER}
         image: mariadb-es
@@ -75,14 +71,14 @@ services:
     maxs1:
         hostname: max1
         container_name: max1
-        image: mariadb/maxscale:${MAXSCALE_VER}
+        image: maxscale-local:23.02
         privileged: true
         ports:
             - 4601:4006
             - 4701:4007
             - 8981:8989
         volumes:
-            - maxscale:/var/lib/maxscale
+            #- maxscale:/var/lib/maxscale
             - ./conf/max.cnf:/etc/maxscale.cnf
             - ./conf/filter.json:/var/lib/maxscale/filter.json
             - ./conf/firewall.rule:/var/lib/maxscale/firewall.rule
@@ -98,7 +94,7 @@ services:
     maxs2:
         hostname: max2
         container_name: max2
-        image: mariadb/maxscale:${MAXSCALE_VER}
+        image: maxscale-local:23.02
         privileged: true
         ports:
             - 4602:4006
@@ -111,7 +107,7 @@ services:
         tmpfs:
             - /tmp
         volumes:
-            - maxscale:/var/lib/maxscale
+            #- maxscale:/var/lib/maxscale
             - ./conf/max.cnf:/etc/maxscale.cnf
             - ./conf/filter.json:/var/lib/maxscale/filter.json
             - ./conf/firewall.rule:/var/lib/maxscale/firewall.rule
