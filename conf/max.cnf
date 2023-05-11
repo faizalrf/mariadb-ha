@@ -33,8 +33,8 @@ auto_failover=true
 auto_rejoin=true
 monitor_interval=1s
 failcount=3
-switchover_timeout=20s
-failover_timeout=20s
+switchover_timeout=60s
+failover_timeout=60s
 
 #cooperative_monitoring_locks=majority_of_all
 cooperative_monitoring_locks=majority_of_running
@@ -47,24 +47,23 @@ user=maxuser
 password=P@ssw0rd
 
 # causal_reads can be one of (none, true/local, global, fast, fast_global)
-causal_reads=true
+#causal_reads=true
 causal_reads_timeout=1s
 
 # To ensure the failed transaction due to a Primary node failure is executed again on the new Primary node
-transaction_replay=true
+#transaction_replay=true
 
 # This is required if LAST_INSERT_ID() is used in the code
 transaction_replay_checksum=no_insert_id
 
 delayed_retry_timeout=120s
-slave_selection_criteria=ADAPTIVE_ROUTING
-#master_accept_reads=true
+master_accept_reads=true
 master_reconnection=true
-delayed_retry=true
+#delayed_retry=true
 prune_sescmd_history=true
 lazy_connect=true
 #max_slave_connections=0
-#filters=Select_RegEX|Insert_RegEX|Update_RegEX|Delete_RegEX
+filters=Select_RegEX
 
 [Read-Write-Listener]
 type=listener
@@ -73,39 +72,40 @@ protocol=MariaDBClient
 port=4006
 address=0.0.0.0
 
+[Masked-Read-Service]
+type=service
+router=readconnroute
+servers=MariaDB-1,MariaDB-2,MariaDB-3
+user=maxuser
+password=P@ssw0rd
+router_options=slave
+filters=MaxRows|Data-Masking
+
+[Masked-Listener]
+type=listener
+service=Masked-Read-Service
+protocol=MariaDBClient
+port=4007
+address=0.0.0.0
+
 [Select_RegEX]
 type=filter
 module=regexfilter
-match=select(.*)sharded_table(.*)shard_key=([0-9]*)
-replace=select$1shard_$3$2shard_key=$3
-log_file=/tmp/regexfilter.log
-
-[Delete_RegEX]
-type=filter
-module=regexfilter
-match=delete(.*)from(.*)sharded_table(.*)where(.*)shard_key=([0-9]*)
-replace=delete$1from$2shard_$5$4where$3shard_key=$5
-log_file=/tmp/regexfilter.log
-
-[Update_RegEX]
-type=filter
-module=regexfilter
-match=update(.*)sharded_table(.*)where(.*)shard_key=([0-9]*)
-replace=update$1shard_$4$3$2where$3shard_key=$4
-log_file=/tmp/regexfilter.log
-
-[Insert_RegEX]
-type=filter
-module=regexfilter
-match=insert(.*)into(.*)sharded_table(.*)values(.*)([0-9]*)
-replace=insert$1into$2shard_$5$4values$3$2
+match=select(.*)sales(.*)shard_key=([0-9]*)
+replace=select$1sales_$3$2shard_key=$3
 log_file=/tmp/regexfilter.log
 
 [Data-Masking]
 type=filter
 module=masking
 warn_type_mismatch=never
-large_payload=abort
+#large_payload=abort
 rules=/var/lib/maxscale/filter.json
+
+[MaxRows]
+type=filter
+module=maxrows
+max_resultset_rows=100
+max_resultset_return=error
 
 # EOF

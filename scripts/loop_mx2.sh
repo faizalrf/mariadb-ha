@@ -21,5 +21,5 @@ do
                 IF(COUNT(*)> 0, '\033[0;32mRecord Found\033[0m','\033[0;31m! Not Found !\033[0m' ) 
             FROM ${DBName}.${TableName} WHERE id = $i;"
     i=$((i+1))
-    sleep 0.03
+    sleep 0.05
 done | mariadb -N -u ${UserName} -p${PassWord} -h${maxHost} -P${Port}

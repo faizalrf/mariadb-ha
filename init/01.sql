@@ -17,4 +17,15 @@ INSERT INTO employee (nric, name, phone) values ('S7162688Z', 'James Bond', '918
                                                 ('S9712622G', 'Daffy Duck', '81110001'),
                                                 ('S6562345X', 'John Carter', '99965312');
 
-CREATE TABLE products(id serial, c varchar(100));
+CREATE TABLE sales_202301(id serial, c varchar(100), shard_key int default 202301);
+CREATE TABLE sales_202302(id serial, c varchar(100), shard_key int default 202302);
+CREATE TABLE sales_202303(id serial, c varchar(100), shard_key int default 202303);
+CREATE TABLE sales_202304(id serial, c varchar(100), shard_key int default 202304);
+
+INSERT INTO sales_202301(c) values ('Sales for 202301');
+INSERT INTO sales_202302(c) values ('Sales for 202302');
+INSERT INTO sales_202303(c) values ('Sales for 202303');
+INSERT INTO sales_202304(c) values ('Sales for 202304');
+
+CREATE TABLE big_table(id serial, c varchar(100));
+INSERT INTO big_table (c) select concat('Data-', seq) from seq_1_to_1000000;
