@@ -3,6 +3,10 @@ services:
     server1:
         build:
             context: .
+            args:
+                TARGETARCH: amd64
+                TOKEN: ${DOWNLOAD_TOKEN}
+                MARIADB_VERSION: ${MRDB_VER}
         image: mariadb-es
         hostname: mariadb1
         container_name: mariadb1
@@ -16,11 +20,15 @@ services:
                 ipv4_address: 172.20.0.2
         volumes:
             - ./init:/tmp/init
-            - ./conf/mariadb1.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf
+            - ./conf/mariadb1.cnf:/etc/my.cnf.d/server.cnf
         mem_limit: 2G
     server2:
         build:
             context: .
+            args:
+                TARGETARCH: amd64
+                TOKEN: ${DOWNLOAD_TOKEN}
+                MARIADB_VERSION: ${MRDB_VER}
         image: mariadb-es
         hostname: mariadb2
         container_name: mariadb2
@@ -34,7 +42,7 @@ services:
                 ipv4_address: 172.20.0.3
         volumes:
             - ./init:/tmp/init
-            - ./conf/mariadb2.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf
+            - ./conf/mariadb2.cnf:/etc/my.cnf.d/server.cnf
         depends_on:
             - server1
         mem_limit: 2G
@@ -42,6 +50,10 @@ services:
     server3:
         build:
             context: .
+            args:
+                TARGETARCH: amd64
+                TOKEN: ${DOWNLOAD_TOKEN}
+                MARIADB_VERSION: ${MRDB_VER}
         image: mariadb-es
         hostname: mariadb3
         container_name: mariadb3
@@ -55,7 +67,7 @@ services:
                 ipv4_address: 172.20.0.4
         volumes:
             - ./init:/tmp/init
-            - ./conf/mariadb3.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf
+            - ./conf/mariadb3.cnf:/etc/my.cnf.d/server.cnf
         depends_on:
             - server1
         mem_limit: 2G
@@ -63,7 +75,7 @@ services:
     maxs1:
         hostname: max1
         container_name: max1
-        image: mariadb/maxscale:22.08
+        image: mariadb/maxscale:${MAXSCALE_VER}
         privileged: true
         ports:
             - 4601:4006
@@ -86,7 +98,7 @@ services:
     maxs2:
         hostname: max2
         container_name: max2
-        image: mariadb/maxscale:22.08
+        image: mariadb/maxscale:${MAXSCALE_VER}
         privileged: true
         ports:
             - 4602:4006

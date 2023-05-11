@@ -1,7 +1,7 @@
 #!/bin/bash
 echo
 
-docker container exec mariadb2 bash -c "mariadb -uroot < /tmp/init/delayed_replica.sql"
-docker container exec mariadb3 bash -c "mariadb -uroot < /tmp/init/delayed_replica.sql"
+docker container exec mariadb2 bash -c "mariadb < /tmp/init/delayed_replica.sql"
+docker container exec mariadb3 bash -c "mariadb < /tmp/init/delayed_replica.sql"
 
 echo

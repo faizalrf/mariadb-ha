@@ -4,10 +4,11 @@ echo "y" | docker volume prune
 
 docker compose up --detach --build
 
+echo
+echo "Initializing the Containers!, Please wait..."
 sleep 30
-docker container exec mariadb1 bash -c "mariadb -uroot < /tmp/init/01.sql"
-docker container exec mariadb2 bash -c "mariadb -uroot < /tmp/init/01.sql"
-docker container exec mariadb3 bash -c "mariadb -uroot < /tmp/init/01.sql"
+docker container exec mariadb1 bash -c "mariadb < /tmp/init/01.sql"
+docker container exec mariadb2 bash -c "mariadb < /tmp/init/01.sql"
+docker container exec mariadb3 bash -c "mariadb < /tmp/init/01.sql"
 
-sleep 30
 ./reset_replication
